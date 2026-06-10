@@ -1,14 +1,17 @@
+package aston.hometask;
+
 import java.util.Objects;
+
 
 public final class Person {
     private final String name;
     private final int birthYear;
     private final Address address;
 
-    public Person(String name, int birthYear, Address address) {
+    public Person(final String name, final int birthYear, final Address address) {
         this.name = name;
         this.birthYear = birthYear;
-        this.address = new Address(Objects.requireNonNull(address));
+        this.address = address.clone();
     }
 
     public String getName() {
@@ -16,7 +19,7 @@ public final class Person {
     }
 
     public Address getAddress() {
-        return new Address(address);
+        return address.clone();
     }
 
     public int getBirthYear() {
@@ -24,7 +27,7 @@ public final class Person {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
         return birthYear == person.birthYear && Objects.equals(name, person.name) && Objects.equals(address, person.address);
@@ -35,15 +38,15 @@ public final class Person {
         return Objects.hash(name, birthYear, address);
     }
 
-    public final static class Address {
+    public static final class Address {
         private String city;
         private String street;
 
-        public Address(String city, String street) {
+        public Address(final String city, final String street) {
             this.city = city;
             this.street = street;
         }
-        public Address(Address other) {
+        public Address(final Address other) {
             this.city = other.city;
             this.street = other.street;
         }
@@ -51,7 +54,7 @@ public final class Person {
             return city;
         }
 
-        public void setCity(String city) {
+        public void setCity(final String city) {
             this.city = city;
         }
 
@@ -59,12 +62,12 @@ public final class Person {
             return street;
         }
 
-        public void setStreet(String street) {
+        public void setStreet(final String street) {
             this.street = street;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (o == null || getClass() != o.getClass()) return false;
             Address address = (Address) o;
             return Objects.equals(city, address.city) && Objects.equals(street, address.street);
@@ -73,6 +76,11 @@ public final class Person {
         @Override
         public int hashCode() {
             return Objects.hash(city, street);
+        }
+
+        @Override
+        public Address clone() {
+            return new Address(this);
         }
     }
 }
